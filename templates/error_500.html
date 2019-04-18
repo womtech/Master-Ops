@@ -1,0 +1,29 @@
+{% extends './base.html' %}
+{% load mathfilters %}
+{% load static %}
+{% load qc_component_rendering %}
+{% block title %} Home Page - QC Dashboard | MOps  {% endblock %}
+
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+{% getmenu "Home" %}
+{% getBreadCrumb "Home" %}
+
+
+    <!-- Page Content -->
+    <div class="container" style="min-height:800px; height:100%;">
+      <div class="row" style="padding:2%">
+	<div class="col-md-12">
+	  <h1>Error 500: Ops Something went heywire!</h1>
+	  <h5 class="heading float-left">Overall Stats</h5>
+	</div>
+      </div>
+    </div>
+    <!-- /.container -->
+
+    {% block footer %}{% include './footer.html' %}{% endblock %}
+{% endblock %}

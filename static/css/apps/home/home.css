@@ -1,0 +1,34 @@
+.inset {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 2px rgba(255,255,255,0.6), 
+    0 1px 1px rgba(0,0,0,0.1);
+  background-color: transparent !important;
+  z-index: 999;
+}
+
+.inset img {
+  border-radius: inherit;
+  width: inherit;
+  height: inherit;
+  display: block;
+  position: relative;
+  z-index: 998;
+}
+
+ul > li {
+    display: inline-block;
+    margin: 0 10px 30px 10px;
+}
+
+.apps_card:hover {
+  box-shadow: 0 0 11px rgba(103, 56, 71, 0.48); 
+}
+ 
+.theme-color {
+  background-color:#3b8bda!important;
+}
+
+.ht-700 { min-height: 700px; height:100%; }

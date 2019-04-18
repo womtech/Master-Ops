@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load component_rendering %}
+{% block title %} Home Page | Master Ops Dashboard {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/apps/home/home.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Navigation -->
+  {% getmenu "Home" %}
+
+  <!-- Page Content -->
+  <div class="container ht-700" >
+    {% if data.count == 0 %}
+      <div style="margin:15%"><h1>Sorry! No apps was assigned to you!</h1></div>
+    {% else %}
+    <ul style="list-style: none;margin-top:5%; display: inline-block;">
+    {% for app in data.data %}
+      <li class="apps_card">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">{{ app.0 }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ app.4 }}</h6>
+            <p class="card-text">{{ app.2 }}</p>
+            <a href="{{ app.6 }}" class="card-link">Access the App</a>
+          </div>
+        </div>         
+       </li>
+    {% endfor %}
+    </ul>
+    {% endif %} 
+  </div>
+  {% block footer %}{% include './footer.html' %}{% endblock %}
+  <!-- /.container -->
+{% endblock %}

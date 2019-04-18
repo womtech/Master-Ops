@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load onemusic_component_rendering %}
+{% block title %} Home Page - QC Dashboard | MOps  {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<link rel="stylesheet" href="{% static 'css/apps/onemusic/onemusic.css' %}"/>
+{% endblock %}
+
+{% block content %}
+{% getmenu "Reports" %}
+{% getBreadCrumb "Reports" %}
+
+<!-- Page Content -->
+<div class="container" style="min-height:800px; height:100%;">
+
+<div class="row">
+ <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bgg-themeE text-white">Platform Wise Earnings</div>
+      <div class="card-body justify-content-center">
+	<div class="panel panel-primary">
+	  <form>
+	    <div class="input-group mb-3">
+	      <div class="input-group-prepend">
+	        <span class="input-group-text font-weight-bold">FILTER</span>
+	      </div>
+	      <select class="form-control" >
+	        <option disabled selected>Platform Name</option><option>Amazon</option>
+	      </select>
+	      <input type="date" class="form-control" placeholder="Select Date Range">
+	      <input type="button" value ="submit" class="form-control btn-primary" />
+	    </div>
+	  </form><hr>
+        </div>	
+      </div>
+    </div>
+ </div>
+</div>
+
+<div class="row">
+ <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bgg-themeE text-white">Deal Wise Earnings</div>
+      <div class="card-body justify-content-center">
+        <div class="panel panel-primary">
+	  <form>
+	    <div class="input-group mb-3">
+	      <div class="input-group-prepend">
+	        <span class="input-group-text font-weight-bold">FILTER</span>
+	      </div>
+	      <input type="text" class="form-control" placeholder="Deal Code">
+	      <select class="form-control">
+	        <option disabled>Search By Deal Code</option><option>Deal Code 1</option>
+	      </select>
+	      <select class="form-control">
+	        <option disabled>Search By Partner Code</option><option>Partner - 1</option><option>Partner - 2</option>
+	      </select>
+	      <input type="date" class="form-control" placeholder="Select Date Range">
+	      <input type="button" value ="submit" class="form-control btn-primary" />
+	    </div>
+	  </form><hr>
+        </div>
+      </div>
+    </div>
+ </div>
+</div>
+
+<div class="row">
+ <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bgg-themeE text-white">Title Wise Earnings</div>
+      <div class="card-body justify-content-center">
+        <div class="panel panel-primary">
+	  <form>
+	    <div class="input-group mb-3">
+	      <div class="input-group-prepend">
+	        <span class="input-group-text font-weight-bold">FILTER</span>
+	      </div>
+	      <input type="text" class="form-control" placeholder="Search By Title">
+	      <select class="form-control">
+	        <option disabled>Search By Deal Code</option><option>Deal Code 1</option>
+	      </select>
+	      <select class="form-control">
+	        <option disabled>Search By Title</option><option>Title 1</option><option>Linkin Park</option>
+	      </select>
+	      <select class="form-control">
+	        <option disabled>Search By Platform</option><option>Amazon</option><option>Hooq</option>
+	      </select>
+	      <input type="date" class="form-control" placeholder="Select Date Range">
+	      <input type="button" value ="submit" class="form-control btn-primary" />
+	    </div>
+	  </form><hr>
+        </div>
+      </div>
+    </div>
+ </div>
+</div>
+
+</div>
+{% block footer %}{% include './footer.html' %}{% endblock %}
+{% endblock %}

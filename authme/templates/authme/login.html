@@ -1,0 +1,62 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %} Login Page | Master Ops Dashboard {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/apps/authme/login.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+       {% if messages %}
+	{% for message in messages %}
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <strong>Oh snap!</strong> {{ message }}
+            </div>
+	{% endfor %}
+       {% endif %}
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign In</h5>
+            <form class="form-signin" method="GET" action="." enctype="multipart/form-data">
+		{# csrf_token #}
+              <div class="form-label-group">
+                <input type="text" id="inputUsername"  name = "inputUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputUsername">Username</label>
+              </div>
+
+              <div class="form-label-group">
+                <input type="password" id="inputPassword" name = "inputPassword"  class="form-control" placeholder="Password" required>
+                <label for="inputPassword">Password</label>
+              </div>
+
+              <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                <label class="custom-control-label" for="customCheck1">Remember password</label>
+              </div>
+              {% if cookie_message == 'True' %}   
+              <button type="submit" class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" disabled>Sign in</button>
+	      {% else %}
+              <button type="submit" class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+	      {% endif %}
+              <hr class="my-4">
+              <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit" disabled><i class="fab fa-google mr-2"></i> Sign in with Google</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if cookie_message == 'True' %}
+    <div class="alert alert-danger alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <strong>ATTENTION:</strong> Please enable your Cookie to make sure seemless experience in the app. <a href="{% url 'authme:ccheck' %}">Reload to check again</a>
+    </div>
+    {% endif %}
+
+  </div>
+</body>
+
+{% endblock %}

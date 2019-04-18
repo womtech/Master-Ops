@@ -1,0 +1,16 @@
+from django.db import models
+from django.conf import settings
+from django.contrib.auth.models import User
+from Property.models import CMS, Facebook
+
+# Create your models here.
+class Property_Ownership( models.Model ):
+  _id = models.AutoField( primary_key=True )
+  user_id_fk = models.ForeignKey(settings.AUTH_USER_MODEL, default=1, verbose_name="Select User", blank=False)
+
+  #facebok_page_ids = models.
+  def __str__( self ):
+    return "%s" % self.user_id_fk
+
+
+

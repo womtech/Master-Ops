@@ -1,0 +1,51 @@
+{% extends './base.html' %}
+{% load static %}
+{% load dam_component_rendering %}
+{% block title %} Digital Library - DAM Dashboard | MOps  {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{% static 'js/utilities.js' %}"></script>
+<script src="{% static 'js/apps/dam/dam.js' %}"></script>
+{% endblock %}
+{% block content %}
+{% getmenu "Lookups" %}
+{% getBreadCrumb "Lookups" %}
+
+<!-- Page Content -->
+<div class="container" style="min-height:700px; height:100%;">
+<div class="row">
+ <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bgg-themeH text-white">Digital Assets Library</div>
+      <div class="card-body justify-content-center">
+	<div class="panel panel-primary">
+	  <form>
+	    <div class="input-group mb-3">
+	      <div class="input-group-prepend">
+	        <span class="input-group-text font-weight-bold">FILTER</span>
+	      </div>
+	      <input type="text" class="form-control" placeholder="Asset Name">
+	      <select class="form-control">
+	        <option disabled="" selected="">Asset Type</option><option>JPG</option><option>MP4</option><option>MP3</option>
+	      </select>
+	      <input type="button" value="submit" class="form-control btn-primary bgg-themeH">
+	    </div>
+	  </form><hr>
+	  <div class="table-responsive-md">
+            <table id="tbl_dam" class="table"></table>
+          </div>
+        </div>	
+      </div>
+    </div>
+ </div>
+</div>
+</div>
+{% block footer %}{% include './footer.html' %}{% endblock %}
+<!-- /.container -->
+{% endblock %}

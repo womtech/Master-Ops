@@ -1,0 +1,88 @@
+{% extends '../base.html' %}
+{% load static %}
+{% load qc_component_rendering %}
+{% block title %} Home Page - QC Dashboard | MOps  {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="{% static 'css/apps/qc/qc.css' %}"/>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{% static 'js/utilities.js' %}"></script>
+<script src="{% static 'js/apps/qc/qc.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+{% getmenu "Videos" %}
+{% getBreadCrumb "Videos" %}
+
+<!-- Page Content -->
+<div class="container" style="min-height:700px; height:100%;">
+
+  <div class="row collapse" id="filter">
+    <div class="col-md-12">
+      <div class="card text-black">
+        <div class="card-body">
+          <form action="/qc/filter" type="get" id="qc_list_filter">
+          <div class="row">
+            {% for item in data %}
+            {% for key, values in item.items %}
+            <div class="col-md-2 col-sm-1">
+              <div class="form-group" >
+                <label for="f_{{key}}"> {{ key | upper }}</label>
+                <select multiple class="form-control" id="f_{{key}}" name="f_{{key}}" size="3">
+                  {% for value in values %}
+                  <option id="{{value.0}}" value="{{value.0}}">{{value.1}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            {% endfor %}{%endfor%}
+            <div class="col-md-2 col-sm-2">
+              <div class="form-group" >
+                <label for="f_daterange">QC Status</label>
+                <select class="form-control" id="f_qc_status" name="f_{{key}}">
+                  <option value="FALSE">Not Done</option>
+                  <option value="TRUE">Done</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2 col-sm-2">
+              <div class="form-group" >
+                <label for="f_daterange"> Date Filter</label>
+                <input type="text" class="form-control" name="f_daterange" value="01/01/2018 - 01/15/2018"/>		   
+              </div>
+            </div>
+	    <input type="hidden" id="filter" name="filter" value='true'>
+            <div class="col-md-2 col-sm-2" >
+              <button class="btn btn-primary">Search</button>
+              <button class="btn btn-primary">Reset</button>
+            </div>
+          </div>
+          </form>
+        </div>
+      </div>
+  </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <label class="switch float-right collapsed" data-target="#filter" data-toggle="collapse" aria-expanded="false">
+      <input type="checkbox">
+      <span class="slider"></span>
+      </label>
+    </div>
+    <div class="col-md-12">
+      <div class="table-responsive-md">
+        <table id="tbl_qc" class="table" style="width:100%"></table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% block footer %}{% include './footer.html' %}{% endblock %}
+<!-- /.container -->
+{% endblock %}

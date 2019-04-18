@@ -1,0 +1,158 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %} Home Page | Master Ops Dashboard {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/ytm.css' %}"/>
+{% endblock %}
+{% block content %}
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger static-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+          <img src="http://placehold.it/150x50?text=YTM" alt="">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+	  <a class="nav-link" href="/myitems">
+              	<span>My Items</span>
+	  </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user.get_full_name }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">My Activities</a>
+            <a class="dropdown-item" href="#">Profile</a>
+              <a class="dropdown-item" href="/admin">Admin Console</a>
+
+            <a class="dropdown-item" href="#">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'authme:logout' %}">Sign out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container">
+
+  {% if data.count == 0 %}
+    <div style="margin:15%"><h1>Sorry! No apps was assigned to you!</h1></div>
+  {% else %}
+
+<!-- Available Operations -->
+<section id="team" class="pb-5">
+    <div class="container">
+        <div class="row">
+            <!-- Video Upload -->
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p><img class=" img-fluid" src="https://www.seoclerk.com/pics/want29737-1He6Uf1438550973.png" alt="card image"></p>
+                                    <h4 class="card-title">Video Upload</h4>
+                                    <p class="card-text">You can upload the video to youtube directly using this feature</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+				<h4 class="card-title">Statistics</h4>
+				<ul style="list-style:none">
+					<li>Total Uploads: 45</li>
+					<li>Draft: 45</li>
+					<li>Error Uploaded: 45</li>
+				</ul>
+				<a href="/ytm/upload">Access the Form</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ./Video Upload -->
+            <!-- Update Meta Data -->
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p><img class=" img-fluid" src="http://www.myiconfinder.com/uploads/iconsets/128-128-76912453c14fc15ed016df244ce34b54.png" alt="card image"></p>
+                                    <h4 class="card-title">Video Meta Data</h4>
+                                    <p class="card-text">You can update the video meta data to youtube directly using this feature</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+				<h4 class="card-title">Video Meta Data</h4>
+				<ul style="list-style:none">
+					<li>Total Uploads: 45</li>
+					<li>Draft: 45</li>
+					<li>Error Uploaded: 45</li>
+				</ul>
+
+                             </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ./Update Video Meta Data -->
+            <!-- Analytics -->
+            <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="image-flip" ontouchstart="this.classList.toggle('hover');">
+                    <div class="mainflip">
+                        <div class="frontside">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <p><img class=" img-fluid" src="https://cdn3.iconfinder.com/data/icons/complete-set-icons/512/graph.png" alt="card image"></p>
+                                    <h4 class="card-title">Analytics</h4>
+                                    <p class="card-text">You can track the performance of avested youtube properties</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="backside">
+                            <div class="card">
+                                <div class="card-body text-center mt-4">
+                                    <h4 class="card-title">Statistics</h4>
+					<ul style="list-style:none">
+						<li>Total Uploads: 45</li>
+						<li>Draft: 45</li>
+						<li>Error Uploaded: 45</li>
+					</ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ./Analytics -->
+
+        </div>
+    </div>
+</section>
+<!-- Available Operations -->
+  {% endif %}
+</div>
+<!-- /.container -->
+{% endblock %}

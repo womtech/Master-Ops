@@ -1,0 +1,137 @@
+import sys
+sys.path.insert(0, '/projects/mops/cfms/')
+from django.shortcuts import render, redirect
+from django.views.generic.base import View
+from django.http import HttpResponse
+from libraries.PostgreSQLConnector import PostgreSQLConnector
+from libraries.packages.Permissions import PagePermissions
+from classes.ContractReportDetail import ContractReportDetail
+from classes.Partner_Performance_Report import Partner_Performance_Report
+from classes.Contract_Performance_Report import Contract_Performance_Report
+from classes.Platform_Performance_Report import Platform_Performance_Report
+from classes.Asset_Performance_Report import Asset_Performance_Report
+from django.http.response import JsonResponse
+from django.core import serializers
+from datetime import datetime, timedelta
+import json, collections
+
+# Create your views here.
+class CFMSReport_Contract( View ):
+
+  def get( self, request, *args, **kwargs):
+    return render( request, "cfms/contract_performance_report.html")
+
+  def post( self, request, *args, **kwargs ):
+    CPR = Contract_Performance_Report()
+    data = CPR.processMe(request)
+    return JsonResponse( data , safe=False)
+
+
+class CFMSReport_ContractReportDetail( View ):
+
+  def Convert(self, tup, di):
+    for a, b in tup:
+      di.setdefault(a, []).append(b)
+    return di
+
+
+  def get(self, request, *args, **kwargs):
+    psy = PostgreSQLConnector()
+    CONTRACT_ID = 1
+    QUERY = '''
+      SELECT ces.earning_ref_id, at.code as title_code, at.display_name as title_name, ep.code as partner_code, ce.month,gp.platform_name,
+      sum(ces.calculated_revenue_usd) as gross_earning_source, (efe.currency_to * sum(ces.calculated_revenue_usd)) as converted_gross_earning,
+      concat(efe.currency_from,' ',efe.currency_from_currency,' = ', efe.currency_to,' ', efe.currency_to_currency) from cfms_earningsplit as
+      ces join cfms_earning as ce on ce.id = ces.earning_ref_id join extras_partner as ep on ep.id = ces.partner_id join generic_platform as
+      gp on gp.plat_id = ce.platform_id_id join extras_fexchange as efe on efe.id = ce.currency_id join asset_title as at
+      on at.id = ce.title_id_id join cfms_contract as cc on cc.id = ce.contract_id where ce.contract_id = %d
+      group by at.code, at.display_name , ep.code, ce.month, gp.platform_name, efe.currency_from_currency, efe.currency_from,
+      efe.currency_to_currency, efe.currency_to, ces.earning_ref_id
+    ''' % ( int(CONTRACT_ID)  )
+    result = psy._custom( QUERY, "select", "named_tuple" )
+    Main = []
+    if( len(result['data'])!=0 ):
+      d = {}
+
+      for key in result['data']:
+          
+#if item.earning_ref_id in Main:
+              #T[key] = value
+              #T['title_name'] = item.title_name
+              #T['partner_code'] = item.partner_code
+          print(key.items())
+
+    return render( request, "cfms/contract_report_dv.html", {"data":result})
+
+  def post( self, request, *args, **kwargs):
+    return JsonResponse([], safe=False)
+    #Obj = Contract_Detail_Report()
+    #data = Obj.processMe(request )
+    #return JsonResponse ( data, safe=False )
+
+
+class CFMSReport_Partner( View ):
+
+  def __init__(self):
+    self.psy = PostgreSQLConnector()
+
+  def post( self, request, *args, **kwargs ):
+    PPR = Partner_Performance_Report()
+    data = PPR.processMe(request);
+    return JsonResponse( data , safe=False)
+
+  def get( self, request, *args, **kwargs):
+    return render( request, "cfms/partner_performance_report.html")
+
+class CFMSReport_Platform( View ):
+  def get( self, request, *args, **kwargs):
+    return render( request, "cfms/platform_performance_report.html")
+
+  def post(self, request, *args, **kwargs):
+    PPR = Platform_Performance_Report()
+    data = PPR.processMe ( request )
+    return JsonResponse( data, safe = False)
+
+
+class CFMSReport_Asset( View ):
+  def post(self, request, *args, **kwargs):
+    PPR = Asset_Performance_Report()
+    data = PPR.processMe ( request )
+    return JsonResponse( data, safe = False)
+
+  def get( self, request, *args, **kwargs):
+    return render( request, "cfms/asset_performance_report.html")
+
+class CFMSReport_Affiliate( View ):
+  def get( self, request, *args, **kwargs):
+    return render( request, "cfms/contract_performance.html")
+
+class CFMSHome( View ):
+  def get(self,request,*args,**kwargs):
+    QUERY_SUMMARY = '''select distinct((select count(id)  from cfms_contract where contract_status ~ 'Active' and start_date >= '2013-01-01' AND end_date <= '2020-01-01')) as Contracts,
+      (select count(*) from asset_title where status = TRUE and added_on BETWEEN '2013-01-01' AND '2020-01-01') as Titles, 
+      (select sum(calculated_revenue_usd) from cfms_earningsplit) as Top_Line_Revenue,
+      (select sum(calculated_revenue_usd) from cfms_earningsplit where partner_id NOT IN (2,3)) as Gross_Revenue,
+      (select sum(calculated_revenue_usd) from cfms_earningsplit where partner_id IN (2,3)) as Partner_Revenue from cfms_contract as a;'''
+    QUERY_OUTSTANDING_CONTRACTS = '''SELECT  cfms_contract.code,sum(cfms_earning.revenue) as a FROM cfms_contract
+      INNER JOIN cfms_earning ON cfms_contract.id = cfms_earning.contract_id where cfms_contract.contract_status ~ 'Active'
+      group by cfms_contract.code order by a desc limit 10;'''
+
+    QUERY_OUTSTANDING_PLATFORMS = '''SELECT generic_platform.platform_name, sum(cfms_earning.revenue) as a
+      FROM generic_platform INNER JOIN cfms_earning ON cfms_earning.platform_id_id = generic_platform.plat_id 
+      group by generic_platform.plat_id order by a desc limit 10;'''
+
+    QUERY_OUTSTANDING_PARTNER = '''SELECT extras_partner.partner_name, sum(cfms_earningsplit.calculated_revenue_usd) as a
+      FROM extras_partner INNER JOIN cfms_earningsplit ON  cfms_earningsplit.partner_id = extras_partner.id group by extras_partner.id order by a desc limit 10;'''
+    self.psy = PostgreSQLConnector()
+    response_summary = self.psy._custom(QUERY_SUMMARY,"select","named_tuple")
+    response_contracts_summary = self.psy._custom(QUERY_OUTSTANDING_CONTRACTS,"select",'named_tuple')
+    response_platforms_summary = self.psy._custom(QUERY_OUTSTANDING_PLATFORMS,"select",'named_tuple')
+    response_partner_summary = self.psy._custom(QUERY_OUTSTANDING_PARTNER,"select",'named_tuple')
+    return render(request,"cfms/home.html", {'summary':response_summary['data'], 'rcs':response_contracts_summary['data'], 'rpls':response_platforms_summary['data'], 'rpas':response_partner_summary['data'] } )
+   
+
+class CFMSList( View ):
+  def get(self, request, *args, **kwargs):
+    return render(request,"cfms/list.html")
+

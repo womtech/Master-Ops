@@ -1,0 +1,452 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %} Home Page | Master Ops Dashboard {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" xmlns="http://www.w3.org/1999/html"/>
+<link rel="stylesheet" type="text/css" href="{% static 'css/font.css' %}" xmlns="http://www.w3.org/1999/html"/>
+
+{#<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>#}
+
+{% endblock %}
+{% block content %}
+{#{% block content %}#}
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger static-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+          <img src="http://placehold.it/150x50?text=YTM" alt="">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home
+                <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+	  <a class="nav-link" href="/myitems">
+              	<span>My Items</span>
+	  </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user.get_full_name }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">My Activities</a>
+            <a class="dropdown-item" href="#">Profile</a>
+              <a class="dropdown-item" href="/admin">Admin Console</a>
+
+            <a class="dropdown-item" href="#">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'authme:logout' %}">Sign out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+{% if data.count == 0 %}
+    <div style="margin:15%"><h1>You don't have permission to access this page</h1></div>
+  {% else %}
+
+<!-- Page Content -->
+    <form>
+&nbsp;
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="sel1">Select CMS:</label>
+                    <select class="form-control-m" id="sel1">
+                         <option>ViuClip India</option>
+                        <option>Mango News</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="sel2">Select Channel:</label>
+                    <select class="form-control-m" id="sel2">
+                        <option>ABN</option>
+                        <option>V6</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                     <label for="exampleFormControlFile1">Upload Video:</label>
+                    <div class="default-file-upload">
+                        <input id="file-upload1" type="file"/>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Upload Thumbnail:</label>
+                    <div class="default-file-upload">
+                        <input id="file-upload2" type="file"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <br>
+            <div class="form-group">
+                <label for="sel2">Video Status:</label>
+                <select>
+                    <option value="saab">Public</option>
+                    <option value="opel">Private</option>
+                    <option value="audi">Published</option>
+                </select>
+             </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="Textarea1">Video Tags:</label>
+                        <textarea class="form-control" id="Textarea1" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="Textarea2">Video Description:</label>
+                        <textarea class="form-control" id="Textarea2" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+
+    <section id="tabs" class="project-tab">
+        <div class="container">
+            <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+
+            <div class="row">
+                <div class="col">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                    <div class="default-file-upload">
+                        <input id="file-upload1" type="file"/>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="col">
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Upload Thumbnail:</label>
+                    <div class="default-file-upload">
+                        <input id="file-upload2" type="file"/>
+                    </div>
+                </div>
+   {#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+         </div>
+        </div>
+            <br>
+            <div class="form-group">
+                <label for="sel2">Video Status:</label>
+                <select>
+                            <a class="nav-item nav-link active" id="nav-basic-tab" data-toggle="tab" href="#nav-basic" role="tab" aria-controls="nav-basic" aria-selected="true">Basic info</a>
+ <div class="form-group">
+                    <label for="exampleFormControlFile1">Upload Video:</label>
+                            <a class="nav-item nav-link" id="nav-translation-tab" data-toggle="tab" href="#nav-translation" role="tab" aria-controls="nav-translation" aria-selected="false">Translations</a>
+                            <a class="nav-item nav-link" id="nav-monetization-tab" data-toggle="tab" href="#nav-monetization" role="tab" aria-controls="nav-monetization" aria-selected="false">Monetization</a>
+                            <a class="nav-item nav-link" id="nav-settings-tab" data-toggle="tab" href="#nav-settings" role="tab" aria-controls="nav-settings" aria-selected="false">Advanced settings</a>
+                        </div>
+                    </nav>
+
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-basic" role="tabpanel" aria-labelledby="nav-basic-tab">
+                            &nbsp;
+{#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+                            <div class="row">
+                                <div class="col">
+                                    <label for="drop1">
+                                        <strong>Original language</strong></label>
+                                        <select class="form-control-m" id="drop1">
+                                            <option>Select language</option>
+                                            <option>Newest first</option>
+                                        </select>
+                                    <div class="form-group">
+                                        <label for="usr">Title:</label>
+                                        <input type="text" class="form-control" id="usr">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comment">Description:</label>
+                                        <textarea class="form-control" rows="5" id="comment"></textarea>
+{#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--translation-->
+                        <div class="tab-pane fade" id="nav-translation" role="tabpanel" aria-labelledby="nav-translation-tab">
+                            &nbsp;
+                            <div class="row">
+                                <div class="col">
+                                    <label for="drop2">
+                                        <strong>Original language</strong></label>
+                                    <select class="form-control-m" id="drop2">
+                                        <option>Select language</option>
+                                        <option>Newest first</option>
+                                    </select>
+                                    <div class="form-group">
+                                        <label for="usr">Title:</label>
+                                        <input type="text" class="form-control" id="usr">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comment">Description:</label>
+{#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+                                        <textarea class="form-control" rows="5" id="comment"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label for="drop3">
+                                        <strong>Translate into</strong></label>
+                                    <select class="form-control-m" id="drop3">
+                                        <option>Select language</option>
+                                        <option>Newest first</option>
+                                    </select>
+                                    <div class="form-group">
+                                        <label for="usr1">Title:</label>
+                                        <input type="text" class="form-control"  placeholder="Enter translated title" id="usr1">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="comment1">Description:</label>
+                                        <textarea class="form-control" placeholder="Enter translated description" rows="5" id="comment1"></textarea>
+{#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Monetization-->
+                                                    &nbsp;
+
+                        <div class="tab-pane fade" id="nav-monetization" role="tabpanel" aria-labelledby="nav-monetization-tab">
+                            <strong>Monetization status:<tt>$</tt></strong>
+                            <hr>
+                            <label for="drop4"><strong>Usage policy</strong></label>
+                            <select class="form-control-m" id="drop4">
+                                <option>Usage - Monetize in all countries</option>
+                                <option>Newest first</option>
+                            </select>
+                            <hr>
+                            <label for="drop4a"><strong>Enable Content ID matches</strong></label>
+                            <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check">
+                                    <label class="custom-control-label" for="Check">I have the necessary rights to claim other videos that contin this content.</label>
+{#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+                                </div>
+                            <label for="drop4"><strong>Match policy</strong></label>
+                            <select class="form-control-m" id="drop4a">
+                                <option>Select policy</option>
+                                <option>Newest first</option>
+                            </select>
+                            <hr>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="sel3"><strong>Allow information</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample1" name="groupOfDefaultRadios">
+                                        <label class="custom-control-label" for="defaultGroupExample1">Web</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample2" name="groupOfDefaultRadios">
+                                        <label class="custom-control-label" for="defaultGroupExample2">TV Episode</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" class="custom-control-input" id="defaultGroupExample3" name="groupOfDefaultRadios">
+                                        <label class="custom-control-label" for="defaultGroupExample3">Movie</label>
+{#            <form  method="post" id="upload" data-cms-url="{% url 'ytm:ajax_load_channels' %}" novalidate>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Advanced settings-->
+                        &nbsp;
+                        <div class="tab-pane fade" id="nav-settings" role="tabpanel" aria-labelledby="nav-settings-tab">
+
+                            <div class="col">
+                                <strong>Comments:</strong>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="custom">
+                                    <label class="custom-control-label" for="custom">Allow comments.<a href="https://support.google.com/youtube/answer/111870?hl=en" class="text-primary" target="_blank">Learn more</a></label><br><br>
+                                    <label for="drop5"><strong>Show</strong></label>
+                                    <select class="form-control-m" id="drop5">
+                                        <option>All</option>
+                                        <option>All except potentially inappropriate comments</option>
+                                        <option>Approved</option>
+                                    </select>
+                                    <br>
+                                    <br>
+                                    <label for="drop6"><strong>Sort by</strong></label>
+                                    <select class="form-control-m" id="drop6">
+                                        <option>Comments</option>
+                                        <option>Newest first</option>
+                                    </select>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                    <label class="custom-control-label" for="customCheck1">Users can view ratings for this video</label>
+                                </div>
+                                <label for="drop7"><strong>License and rights ownership:</strong></label><br>
+                                <select class="form-control-m" id="drop7">
+                                    <option>Standard YouTube License</option>
+                                    <option>Creative Commons - Attribution</option>
+                                </select>
+                                <br>
+                                <br>
+                                <label for="sel2"><strong>Chat:</strong></label>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check1">
+                                    <label class="custom-control-label" for="Check1">Allow live chat reply for this Premiere</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check2">
+                                    <label class="custom-control-label" for="Check2">Enable slow mode</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check3">
+                                    <label class="custom-control-label" for="Check3">Automatically block spam messages</label>
+                                </div>
+                                <label for="sel2"><strong>YouTube Music:</strong></label>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check4">
+                                    <label class="custom-control-label" for="Check4">Enable this video for audio-only use within YouTube music</label>
+                                </div>
+                                <label for="sel3"><strong>Sydication:</strong></label>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="defaultGroup" name="groupOfDefaultRadios">
+                                    <label class="custom-control-label" for="defaultGroup">Everywhere</label>
+                                    <p class="text-muted">Make this video available on all platforms</p>
+                                </div>
+                                <!-- Group of default radios - option 2 -->
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" class="custom-control-input" id="GroupExample2" name="groupOfDefaultRadios" checked>
+                                    <label class="custom-control-label" for="GroupExample2">Monetized platforms</label>
+                                    <p class="text-muted">Make this video available on all monetized platforms</p>
+                                </div>
+                                <br>
+                                <label for="drop8"><strong>Caption certificaion:</strong></label><br>
+                                <select class="form-control-m" id="drop8">
+                                    <option>This content has never aired on television in the U.S.</option>
+                                    <option>This content has only aired on television in the U.S without captions. </option>
+                                    <option>This content has not aired on U.S television with captions since September 30, 2012.</option>
+                                    <option>This content doesnot consist of full-length video programming.</option>
+                                    <option>This content doesnot fall within a category of online programming that currently requires captions under FCC regulations (47 C.F.R, $79).</option>
+                                    <option>The FCC and/or U.S Congress has granted an exemption from captioning requirements for this content.</option>
+                                </select>
+                                <br>
+                                <br>
+                                <label for="sel3">Skip navigation</label>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check6">
+                                    <h6>Ditribution options</h6>
+                                    <label class="custom-control-label" for="Check6">Allow embedding</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check5">
+                                    <label class="custom-control-label" for="Check5">Publish to subscriptions feed and notify subscribers</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check7">
+                                    <label class="custom-control-label" for="Check7">Age-Restricted trailers.For redband trailers and adult-rated video games.Only users aged 18+ can view the content.</label>
+                                </div>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check8">
+                                    <label class="custom-control-label" for="Check8">Alcoholic Beverages: Only users of legal purchasing age in a particular country, as identified by <a href="https://icap.org/table/MinimumAgeLimitsWorldwide"  class="text-primary" target="_blank">ICAP</a> , can view the content.*</label>
+                                </div>
+                                <label for="drop8">Video game rating</label><br>
+                                <select class="form-control-m" id="drop8">
+                                    <option>Not Restricted</option>
+                                    <option>Mature 15+. Only users aged 15+ can view the content</option>
+                                    <option>Mature 16+. Only users aged 16+ can view the content</option>
+                                    <option>Mature 17+. Only users aged 17+ can view the content</option>
+                                </select>
+                                <br>
+                                <br>
+                                <label for="sel2"><strong>Age restrictions:</strong></label>
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" id="Check9">
+                                    <label class="custom-control-label" for="Check9">Enable age restriction</label>
+                                </div>
+                                <br>
+                                <div class="col">
+                                    <label for="drop9"><strong>Category:</strong></label>
+                                    <select class="form-control-m" id="drop9">
+                                        <option><a href="#tab1">Film & Animation</a></option>
+                                        <option><a href="#tab1">Autos & Vehicles</a></option>
+                                        <option><a href="#tab1">Music</a></option>
+                                        <option><a href="#tab1">Pets & Animals</a></option>
+                                        <option><a href="#tab1">Sports</a></option>
+                                        <option><a href="#tab1">Travel & Events</a></option>
+                                        <option><a href="#tab1">Gaming</a></option>
+                                        <option><a href="#tab1">People & Blogs</a></option>
+                                        <option><a href="#tab1">Comedy</a></option>
+                                        <option><a href="#tab1">News & Politics</a></option>
+                                        <option><a href="#tab1">Entertainment</a></option>
+                                        <option><a href="#tab1">Howto & Style</a></option>
+                                        <option><a href="#tab1">Education</a></option>
+                                        <option><a href="#tab1">Science & Technology</a></option>
+                                        <option><a href="#tab1">Nonprofits & Activism</a></option>
+                                    </select>
+                                    <br>
+                                    <br>
+                                    <label for="drop10"><strong>Video language:</strong></label>
+                                    <select class="form-control-m" id="drop10">
+                                        <option><a href="#tab1">Hindi</a></option>
+                                        <option><a href="#tab1">English (United Kingdom)</a></option>
+                                        <option><a href="#tab1">Not aplicable</a></option>
+                                    </select>
+                                    <br>
+                                    <br>
+                                    <label for="sel2"><strong>Community contributions:</strong></label>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="Check12">
+                                        <label class="custom-control-label" for="Check12">Allow viewers to contribute translated titles, descriptions, and subtitles/CC</label>
+                                    </div>
+                                    <label for="start"><strong>Recording date:</strong></label><br>
+                                    <input type="date" id="start" name="trip-start" ><br>
+
+                                    <br>
+                                    <label for="sel2"><strong>Video statistics:</strong></label>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="Check10">
+                                        <label class="custom-control-label" for="Check10">Make video statistics on the watch page publicly visible</label>
+                                    </div>
+                                    <label for="sel2"><strong>3D video</strong></label>
+                                    <label>The 3D checkbox hasbeen depreciated.Please refer to <a href="https://support.google.com/youtube/answer/7278886?hl=en" class="text-primary" target="_blank">this Help Center article</a>  for instructions on how to specify metadata for uploading 3D files.</label>
+                                    <label for="sel2"><strong>Content declaration</strong></label>
+                                    <div class="custom-control custom-checkbox mb-3">
+                                        <input type="checkbox" class="custom-control-input" id="Check11">
+                                        <label class="custom-control-label" for="Check11">This video contains paid promotion such as paid product placement, sponserships or endorsement</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p align="right">
+            <a href="#" class="btn btn-outline-primary btn-sm"  role="button">Save changes</a>
+            <a href="#" class="btn btn-outline btn-light btn-sm" role="button">Cancel</a>
+        </p>
+
+
+                    <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+
+    </section>
+    {% endif %}
+{% endblock %}
+
+

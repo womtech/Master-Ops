@@ -1,0 +1,141 @@
+{% extends './base.html' %}
+{% load mathfilters %}
+{% load static %}
+{% load kpt_component_rendering %}
+
+{% block title %} Home Page - KPT Dashboard | MOps  {% endblock %}
+
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.min.js"></script> 
+<script src="{% static 'js/utilities.js' %}"></script>
+<script src="{% static 'js/apps/kpt/home.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+{% getmenu "Home" %}
+{% getBreadCrumb "Home" %} 
+
+
+<div class="container" style="min-height:800px; height:auto;">
+   <div class="row">
+      <div class="col-md-12">
+         <h5 class="heading float-left">Overall Stats</h5>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-6">
+         <div class="row">
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header bgg-themeC text-white">Trending Keywords</div>
+                  <div class="card-body justify-content-center">
+                     <h4>{{ hcpc_cnt_result.data.0.0 }}</h4>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header bgg-themeC text-white">High Performing Keywords</div>
+                  <div class="card-body justify-content-center">
+                     <h4>{{ tcpc_cnt_result.data.0.0 }}</h4>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header bgg-themeC text-white">--</div>
+                  <div class="card-body justify-content-center">
+                     <h4>--</h4>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header bgg-themeC text-white">--</div>
+                  <div class="card-body justify-content-center">
+                     <h4>--</h4>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header bgg-themeC text-white">--</div>
+                  <div class="card-body justify-content-center">
+                     <h4>--</h4>
+                  </div>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="card">
+                  <div class="card-header bgg-themeC text-white">--</div>
+                  <div class="card-body justify-content-center">
+                     <h4>--</h4>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-lg-6">
+         <div class="card">
+            <div class="card-header bgg-themeC text-white">Top Performing Keywords</div>
+            <ul class="list-group" style="max-height: 300px; margin-bottom: 10px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+  		{% for item in tcpc.data %}
+                <li class="list-group-item d-flex justify-content-between align-items-center"> {{item.keyword}} <span class="badge badge-primary badge-pill">{{ item.cost_per_click }}</span>  </li>
+		{% endfor %}
+            </ul>
+
+         </div>
+      </div>
+   </div>
+   <div class="row" style="margin-top:20px;">
+      <div class="col-md-6">
+         <div class="card">
+            <div class="card-header bgg-themeC text-white">Import</div>
+            <div class="card-body justify-content-center">
+               <div class="alert alert-primary alert-dismissible" style="display:none;" id="msgdivision">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <strong>Success!</strong> <b id="successRecords"></b> of <b id="totalRecords"></b> successfully uploaded.
+               </div>
+               <form id="kpt_home_csvupload">
+                  <div class="form-group">
+                     <label for="sel1">Import Type:</label>
+                     <select class="form-control" id="sel1">
+                        <option value="kpt_hcpc">High Performing Keywords</option>
+                        <option value="kpt_trendingkeywords">Trending Keywords</option>
+                     </select>
+                  </div>
+                  <div class="form-group">
+                     <label>Upload</label>
+                     <div class="input-group">
+                        <div class="custom-file">
+                           <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                           <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                     </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="submit" upload_url="/kpt/fup">Submit</button>
+                  <button type="button" class="btn btn-link" id="submit" upload_url="/kpt/fup">Download Sample CSV</button>
+                  <a href="data:text/csv;charset=utf-8" id="download" taget="_blank" download="sample.csv"></a>         	
+               </form>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-6">
+	<div class="card">
+	   <div class="card-header bgg-themeC text-white">High CPC Keywords</div>
+	   <ul class="list-group" style="max-height: 300px; margin-bottom: 10px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+	      {% for item in hcpc.data %}
+	      <li class="list-group-item d-flex justify-content-between align-items-center"> {{ item.keyword }} <span class="badge badge-primary badge-pill">{{ item.cost_per_click }}</span>  </li>
+	      {% endfor %}
+	   </ul>
+	</div>
+      </div>
+   </div>
+</div>
+    <!-- /.container -->
+
+    {% block footer %}{% include './footer.html' %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cfms_component_rendering %}
+{% block title %} Contract Performance Report Detail Page - CFMS Dashboard | MOps  {% endblock %}
+{% block link-rel %}
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="{% static 'js/utilities.js' %}"></script>
+<script src="{% static 'js/apps/cfms/cfms_contract_report_detail.js' %}"></script>
+{% endblock %}
+{% block content %}
+{% getmenu "Home" %}
+{% getBreadCrumb "Contract Report Detail" %}
+
+<!-- Page Content -->
+<div class="container" style="min-height:800px; height:100%;">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="form-group float-left">
+	{% if contracts %}
+            <select class="form-control" id="exampleFormControlSelect1">
+	    {% for ct in contracts %}
+               <option value="{{ct.id}}">{{ ct.code }}</option>
+	    {% endfor %}
+            </select>
+	{% endif %}
+         </div>
+         <label class="switch float-right collapsed" data-target="#contract_insights" data-toggle="collapse" aria-expanded="false">
+         <input type="checkbox">
+         <span class="slider"></span>
+         </label><br/>
+         <hr>
+      </div>
+   </div>
+   <div class="row collapse" id="contract_insights">
+      <div class="col-md-6">
+         <div class="row">
+            <div class="col-lg-12">
+               <div class="card">
+                  <div class="card-header">
+                     <h5 class="float-left">Contract Insights</h5>
+                     <label class="switch float-right collapsed" data-target="#contractInsightPanel" data-toggle="collapse" aria-expanded="false">
+                     <input type="checkbox">
+                     <span class="slider"></span>
+                     </label>
+                  </div>
+                  <div class="card-body collapse justify-content-center" id="contractInsightPanel">
+                     <div class="row">
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label class="text-muted">Contract Code</label>
+                              <h6>{{ cmi.0.code }}</h6>
+                           </div>
+                           <div class="form-group">
+                              <label class="text-muted">Contract Category</label>
+                              <h6>{{ cmi.0.contract_nature }}</h6>
+                           </div>
+                           <div class="form-group">
+                              <label class="text-muted">Attachment</label>
+                              <h6><a href="#">Agreement Copy</a></h6>
+                           </div>
+                           <div class="form-group">
+                              <label class="text-muted">Perpetuity</label>
+                              <h6>{{cmi.0.perpetual}}</h6>
+                           </div>
+                        </div>
+                        <div class="col-lg-6">
+                           <div class="form-group">
+                              <label class="text-muted">Sign Date</label>
+                              <h6>{{ cmi.0.sign_date }}</h6>
+                           </div>
+                           <div class="form-group">
+                              <label class="text-muted">Start Date</label>
+                              <h6>{{ cmi.0.start_date }}</h6>
+                           </div>
+                           <div class="form-group">
+                              <label class="text-muted">End Date</label>
+                              <h6>{{ cmi.0.end_date }}</h6>
+                           </div>
+                           <div class="form-group">
+                              <label class="text-muted">Remark</label>
+                              <p><small>{{ cmi.0.notes }}</small></p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-md-6">
+         <div class="row">
+            <div class="col-lg-12">
+               <div class="card">
+                  <div class="card-header">
+                     <h5 class="float-left">More Info</h5>
+                     <label class="switch float-right collapsed" data-target="#contractMorePanel" data-toggle="collapse" aria-expanded="false">
+                     <input type="checkbox">
+                     <span class="slider"></span>
+                     </label>
+                  </div>
+                  <div class="card-body collapse justify-content-center" id="contractMorePanel">
+                     <div class="row">
+                        <div class="col-lg-12">
+                           <div class="card">
+                              <div class="card-header">
+                                 <h5 class="text-muted">Contract Signatories</h5>
+                              </div>
+                              <div class="card-body justify-content-center">
+                                 <table class="table table-responsive">
+                                    <thead>
+                                       <tr>
+                                          <th scope="col">Partner</th>
+                                          <th scope="col">Rev Share</th>
+                                          <th scope="col">Signer Info</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+                                      {% for item in signatories %}
+                                       <tr>
+                                          <td><small><a href="/admin/extras/partner/{{item.partner_id}}/change/">{{ item.signatory }}</a></small></td>
+                                          <td><small>{{ item.rev_percentage }}</small></td>
+                                          <td><small><a href="/admin/extras/contact/{{item.contact_id}}/change/">{{ item.contact }}</a></small></td>
+                                       </tr>
+				      {% endfor %}
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-lg-12">
+                           <div class="card">
+                              <div class="card-header">Digital Rights Management</div>
+                              <div class="card-body justify-content-center">
+                                 <table class="table table-responsive">
+                                    <thead>
+                                       <tr>
+                                          <th scope="col">Entity</th>
+                                          <th scope="col">Type</th>
+                                          <th scope="col">Inclusion</th>
+                                          <th scope="col">Exclusion</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody>
+				{% for item in rights_group %}
+                                       <tr>
+                                          <td><small>{{ item.entity }}</small></td>
+                                          <td><small>{{ item.right_type }}</small></td>
+                                          <td><small>{{ item.exclusivity }}</small></td>
+                                          <td><small>{{ item.inclusivity }}</small></td>
+                                       </tr>
+				{% endfor %}
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="card">
+            <div class="card-header" aria-expanded="true">
+               <div class="heading float-left">Contract Performance Overview</div>
+               <div class="float-right">    
+                  <label class="switch float-right collapsed" data-target="#panelContractPerformanceOverview" data-toggle="collapse" aria-expanded="false">
+                  <input type="checkbox">
+                  <span class="slider"></span>
+                  </label>
+               </div>
+            </div>
+            <div class="card-body justify-content-center collapse" id="panelContractPerformanceOverview">
+               <div class="row">
+                  <div class="col-lg-3">
+                     <div class="form-group">
+                        <label class="text-muted">Top Line Earning</label>
+                        <h6><span class="badge badge-primary">{{ct_overall.0.currency_from_currency}}</span> {{ct_overall.0.total_revenue}} </h6>
+                        <h6><span class="badge badge-warning">{{ct_overall.0.currency_to_currency}}</span> {{ct_overall.0.gross_earning}} </h6>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="form-group">
+                        <label class="text-muted">Net Partner Earning</label>
+                        <h6> -- </h6>
+                        <h6> -- </h6>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="form-group">
+                        <label class="text-muted">Net WOM Earning</label>
+                        <h6> -- </h6>
+                        <h6> -- </h6>
+                     </div>
+                  </div>
+                  <div class="col-lg-3">
+                     <div class="form-group">
+                        <label class="text-muted">Total Titles</label>
+                        <h6> -- </h6>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <hr><br>
+   <h5>Monthly Performance Breakdown</h5>
+   <div class="row">
+      <div class="col-lg-12">
+         <div id="accordion">
+	   {% for mon in month_series %}
+            <div class="card">
+               <div class="card-header">
+                  <div class="float-left">
+		    <i class="fa fa-eye"></i>
+                    <a class="card-link a_monthly_rev_breakup" data-toggle="collapse" href="#collapse{{forloop.counter}}" data-month="{{mon.month}}" data-month-offset="{{forloop.counter}}" data-ctr="{{mon.contract_id}}" aria-expanded="false">{{mon.month}} | (Gr. Earning: {{mon.total_revenue}})</a>
+		  </div>
+		  <div class="float-right">
+		    <small>{{mon.currency_exchange}}</small>
+		    <input type="checkbox" data-toggle="toggle" data-ctr="{{mon.contract_id}}"  class="chk_monthly_breakup" data-month="{{mon.month}}" data-month-offset="{{forloop.counter}}"  data-on="{{mon.currency_to_currency}}" data-off="{{mon.currency_from_currency}}">
+		    <i class="fa fa-print" aria-hidden="true"></i>
+		  </div>
+               </div>
+               <div id="collapse{{forloop.counter}}" class="collapse" data-parent="#accordion" style="">
+                  <div class="card-body">
+ 	            <div class="table-responsive-md" id="table_holder_{{forloop.counter}}">
+                      <table id="tbl_cfms_contract_rep_dv_{{forloop.counter}}" class="table"></table>
+                    </div>
+                  </div>
+               </div>
+            </div>
+	    {% endfor %}
+         </div>
+      </div>
+   </div>
+</div>
+{% block footer %}{% include './footer.html' %}{% endblock %}
+{% endblock %}

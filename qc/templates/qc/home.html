@@ -1,0 +1,123 @@
+{% extends './base.html' %}
+{% load mathfilters %}
+{% load static %}
+{% load qc_component_rendering %}
+{% block title %} Home Page - QC Dashboard | MOps  {% endblock %}
+
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+{% endblock %}
+
+{% block content %}
+
+{% getmenu "Home" %}
+{% getBreadCrumb "Home" %}
+
+
+    <!-- Page Content -->
+    <div class="container" style="min-height:800px; height:100%;">
+      <div class="row" style="padding:2%">
+	<div class="col-md-12">
+	  <h5 class="heading float-left">Overall Stats</h5>
+	</div>
+      </div>
+
+      <div class="row" style="padding:2%;">
+	<div class="col-md-3">
+	  <div class="card">
+	    <div class="card-header bgg-themeB text-white">Total QCed</div>
+	    <div class="card-body justify-content-center">
+		<h4>{{data.0.total_qced}}</h4>
+	    </div>
+	  </div>
+	</div>
+	<div class="col-md-3">
+	  <div class="card">
+	    <div class="card-header bgg-themeB text-white">Total Pending</div>
+	    <div class="card-body justify-content-center">
+		<h4>{{data.0.pending_qc}}</h4>
+	    </div>
+	  </div>
+        </div>
+	<div class="col-md-3">
+	  <div class="card">
+	    <div class="card-header bgg-themeB text-white">Total Items</div>
+	    <div class="card-body justify-content-center">
+		<h4>{{ data.0.total_items }}</h4>
+	    </div>
+	  </div>
+        </div>
+	<div class="col-md-3">
+	  <div class="card">
+	    <div class="card-header bgg-themeB text-white">Total Channels / CMS</div>
+	    <div class="card-body justify-content-center">
+		<h4>{{data.0.total_channels}} / {{data.0.total_cms}}</h4>
+	    </div>
+	  </div>
+        </div>
+      </div>
+      <div class="row" style="padding:2%;">
+	<div class="col-md-12">
+	  <h5 class="heading">Summary</h5><hr>
+	</div>
+        <div class="col-md-6">
+		<table class="table bgg-themeB text-white" id="tbl_cms_summary_view">
+		  <thead>
+		    <tr>
+		      <th scope="col">#</th>
+		      <th scope="col">CMS</th>
+		      <th scope="col">Reported / QCed / Pending</th>
+                      <th scole="col">Productivity Factor</th>
+		      <th scope="col">Hygiene Factor</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+                     {% for i in cms_view.data  %}
+		    <tr>
+		      <th scope="row">{{ forloop.counter }}</th>
+		      <td>{{ i.cms_name }}</td>
+                         {% with  reported=i.qced|add:i.notqced hf=i.qced|add:i.notqced|add:i.notflagged %}
+                      <td>{{ reported }} / {{ i.qced }} / {{i.notqced}} </td>
+		      <td>{{ i.qced|div:reported|floatformat }}  </td>
+		      <td>{{ reported|mul:100|div:hf|floatformat  }}</td>
+                         {% endwith  %}
+		    </tr>
+                    {% endfor %}
+		  </tbody>
+		</table>
+	</div>
+        <div class="col-md-6">
+                <table class="table bgg-themeB text-white" id="tbl_channel_summary_view">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Channel</th>
+                      <!--<th scope="col">Total Videos</th>
+                      <th scope="col">Reported</th>-->
+                      <th scope="col">Reported / QCed / Pending</th>
+                      <th scope="col">Productvity Factor</th>
+                      <th scope="col">Hygiene Factor</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for i in channel_view %}
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ i.channel_name  }}</td>
+                      {% with reported=i.qced|add:i.notqced hf=i.qced|add:i.notqced|add:i.notflagged %}
+                      <td>{{ reported }} / {{  i.qced }} / {{ i.notqced }}</td>
+                      <td>{{ i.qced|div:reported|floatformat }} </td>
+                      <td> {{ reported|mul:100|div:hf|floatformat }}</td>
+                      {% endwith %}
+                      {% endfor  %}
+                     </tr>
+                  </tbody>
+                </table>
+	</div>
+      </div>
+
+    </div>
+    <!-- /.container -->
+
+    {% block footer %}{% include './footer.html' %}{% endblock %}
+{% endblock %}

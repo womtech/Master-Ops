@@ -1,0 +1,95 @@
+from django.shortcuts import render
+from django.views.generic.base import View
+from django.http import HttpResponse
+from libraries.PostgreSQLConnector import PostgreSQLConnector
+from django.http.response import JsonResponse
+from django.core import serializers
+import json
+
+class DAMHome( View ):
+  def get(self, request, *args, **kwargs ):
+    return render(request,"dam/home.html")
+
+
+#DAM Home Route
+class DAMLookups( View ):
+
+  def download(self):
+    return HttpResponse("Hello, I am download!!!")
+
+  def nudge(self):
+    return HttpResponse("Hello, I am Nudgy!!!")
+
+  def place_request(self):
+    return HttpResponse("Hello, I am Place request!!!")
+
+  def get(self, request, *args, **kwargs):
+    self.psy = PostgreSQLConnector( )
+    return render(request,"dam/lookups.html")
+
+  def update( request ):
+    USERID = request.user.id
+    for key, value in request.POST.items():
+      pass
+
+    tCol = key.split("_")
+    id = tCol.pop( )
+    colName = "_".join( tCol )
+    string = colName + " = '%s'" % ( value )
+    query2Update = "update dam_cloudfile set "+ string +"  where code ~'%s'  " % ( id )
+    psy = PostgreSQLConnector( )
+    response = psy._custom( query2Update,"update","json" )
+    return JsonResponse( response, safe = False )
+
+
+  def post( self, request, *args, **kwargs ):
+    self.psy = PostgreSQLConnector( )
+    CURRENT_URL = '/dam/lookups'
+    draw = request.POST.get("draw", 1 )
+    columns = request.POST.get("columns","")
+    order = request.POST.get("order","")
+    START = request.POST.get("start",0)
+    LENGTH = request.POST.get("length",10)
+    SEARCH = str(request.POST.get("search[value]",""))
+    USERID = request.user.id
+    Columns = []
+    DSTR = ""
+
+    QUERY_COL = '''select sa.available_operations, sa.permission_str \
+      from system_apps_assignment saa join system_user_form_level_permission sa \
+      on saa.id=sa.app_assignment_id_fk_id where saa.user_id_fk_id = %d and sa.form_url='%s' ''' % ( USERID, CURRENT_URL )
+
+    response = self.psy._custom( QUERY_COL, "select","named_tuple" )
+    res_perm_fields = response['data'][0][1]
+    for item in res_perm_fields:
+      l = [ item["perm"], item["ctype"], item["id"] ]
+      p = {}
+      p[item["display_name"]] = l
+      p["title"] = item["display_name"]
+      DSTR = DSTR + item["table_alias"]+"."+item["id"] + ","
+      Columns.append(p)
+
+    t_data = self._formatData(DSTR.rstrip(","), SEARCH, USERID, START, LENGTH, request )
+    data_dump = json.dumps(t_data)
+    data = json.loads(data_dump)
+
+    if not data['data']:
+      total_data = 0
+    else:
+      total_data = data['data'][0][-1]
+      for j in data["data"]:
+        j.pop()
+    new_response = {"columns":Columns, "data":data['data'], "draw":draw, "recordsTotal":data['count'], "recordsFiltered":total_data}
+    return JsonResponse( new_response, safe = False)
+
+
+  def _formatData( self, SELECT_FIELDS, SEARCH, USERID, START, LENGTH, request ):
+    filter_flag = request.POST.get('filter')
+    if filter_flag:
+      pass
+    else:
+      WHERE = '''dam_cloudfile.nas_path like '%%%s%%' ''' % ( SEARCH )
+    QUERY = '''SELECT %s, count(*) over() as full_count from dam_cloudfile where %s LIMIT %d OFFSET %d''' % (SELECT_FIELDS, WHERE, int(LENGTH), int( START))
+    response = self.psy._custom( QUERY.replace("\n"," ").replace("\r",""), "select", "named_tuple" )
+    return response
+

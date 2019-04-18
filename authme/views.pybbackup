@@ -1,0 +1,51 @@
+from __future__ import unicode_literals
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
+from django.views.generic.base import View
+from libraries.PostgreSQLConnector import PostgreSQLConnector
+from django.contrib import messages
+from django.contrib.messages import get_messages
+
+class Login( View ):
+
+  #getLoggedIn User Info
+  def getUserPayload(self):
+    psy = PostgreSQLConnector( )
+    query = "select sa.name, sa.status, sa.about, sa._id, saa.profile_name, saa.description from system_app sa \
+         inner join system_apps_assignment saa on saa.app_id_fk_id=sa._id where saa.user_id_fk_id=2;"
+    return psy._custom( query,"select","named_tuple" )
+
+  def get( self, request ):
+    username = request.GET.get("inputUsername",False)
+    password = request.GET.get("inputPassword",False)
+
+    if not username and not password:
+      return render( request, "authme/login.html")
+
+    if username and password:
+      user = authenticate( username=username, password=password )
+      if user is not None:
+        if user.is_active:
+          login( request, user )
+          return redirect("/")
+        else:
+          messages.add_message( request, messages.INFO, 'Login Failed - Your Account Is Inactive', fail_silently=True)
+          return render( request, 'authme/login.html'  )
+      else:
+        messages.add_message( request, messages.INFO, 'Login Failed - Please try again', fail_silently=True)
+        return render( request, 'authme/login.html'  )
+
+    return render( request, "authme/login.html" )
+
+
+  #Post Request Handler
+  def post(self, request, *args, **kwargs):
+    rg = request.POST["inputEmail"]
+    return HttpResponse(rg)
+
+  def logout( request ):
+    logout( request )
+    request.session.modified = True
+    return redirect('/')

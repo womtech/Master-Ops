@@ -1,0 +1,20 @@
+# Master-Ops
+
+
+Environment:
+1. Djano-Admin Version -> 1.11
+
+
+Dependencies:
+1. pip install django-countries
+
+
+Production App URL
+--
+
+  URL:- http://54.202.141.194:8001
+  Symlink:- http://mops.wom.co.in:8001
+  QC:- http://mops.wom.co.in:8001/qc
+  Admin:- http://mops.wom.co.in:8001/admin
+
+-----------------

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cfms_component_rendering %}
+{% block title %} Home Page - DAM Dashboard | MOps  {% endblock %}
+{% block link-rel %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/utilities.css' %}"/>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="{% static 'js/apps/cfms/cfms.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% getmenu "Home" %}
+{% getBreadCrumb "Home" %}
+
+<!-- Page Content -->
+<div class="container" style="min-height:800px; height:100%;">
+    <div class="row">
+      <div class="col-md-12">
+	<form class="form-inline float-right" action="/action_page.php">
+	  <div class="form-group">
+	    <label for="email">Date Range:</label>
+            <input type="text" class="form-control" name="f_daterange" value="01/01/2018 - 01/15/2018">
+	  </div>
+	  <button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+      </div><br><br><hr>
+        <div class="col-lg-6">
+          <div class="card">
+		  {{data}}
+	    <div class="card-header bgg-themeI text-white">Quick Summary View</div>
+	      <ul class="list-group">
+		  	<!-- {% for item in summary %}
+			<li class="list-group-item d-flex justify-content-between align-items-center">{{ item. }} <span class="badge badge-primary badge-pill"> $ {{ item.a }}</span>  </li>
+			{% endfor %} -->
+		<li class="list-group-item d-flex justify-content-between align-items-center"> Contracts <span class="badge badge-primary badge-pill">{{summary.0.contracts}}</span>  </li>
+		<li class="list-group-item d-flex justify-content-between align-items-center"> Titles <span class="badge badge-primary badge-pill">{{summary.0.titles}}</span>  </li>
+		<li class="list-group-item d-flex justify-content-between align-items-center"> Top Line Revenue  <span class="badge badge-primary badge-pill">$ {{summary.0.top_line_revenue}}</span>  </li>
+		<li class="list-group-item d-flex justify-content-between align-items-center"> Gross Revenue  <span class="badge badge-primary badge-pill">$ {{summary.0.gross_revenue}}</span>  </li>
+		<li class="list-group-item d-flex justify-content-between align-items-center"> Partner Revenue  <span class="badge badge-primary badge-pill">$ {{summary.0.partner_revenue}}</span>  </li>
+	      </ul>
+	    </div>
+	  </div>
+        <div class="col-lg-6">
+          <div class="card">
+	    <div class="card-header bgg-themeI text-white">Outstanding Partners</div>
+	      <ul class="list-group" style="max-height: 300px; margin-bottom: 10px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+		  	{% for item in rpas %}
+			<li class="list-group-item d-flex justify-content-between align-items-center">{{ item.partner_name }} <span class="badge badge-primary badge-pill"> $ {{ item.a }}</span>  </li>
+			{% endfor %}
+	
+	      </ul>
+	    </div>
+	  </div>
+
+    </div>
+    <div class="row" style="margin-top:2%;">
+        <div class="col-lg-6">
+          <div class="card">
+	    <div class="card-header bgg-themeI text-white">Outstanding Platforms</div>
+	      <ul class="list-group" style="max-height: 300px; margin-bottom: 10px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+		{% for item in rpls %}
+		<li class="list-group-item d-flex justify-content-between align-items-center">{{ item.platform_name }} <span class="badge badge-primary badge-pill"> $ {{ item.a }}</span>  </li>
+		{% endfor %}
+	      </ul>
+	    </div>
+	  </div>
+        <div class="col-lg-6">
+          <div class="card">
+	    <div class="card-header bgg-themeI text-white">Outstanding Contracts</div>
+	      <ul class="list-group" style="max-height: 300px; margin-bottom: 10px; overflow:scroll; -webkit-overflow-scrolling: touch;">
+		{% for item in rcs %}
+		<li class="list-group-item d-flex justify-content-between align-items-center">{{item.code}}<span class="badge badge-primary badge-pill">$ {{item.a}}</span>  </li>
+		{% endfor %}
+	     </ul>
+	  </div>
+	</div>
+    </div>
+
+</div>
+
+
+{% block footer %}{% include './footer.html' %}{% endblock %}
+{% endblock %}

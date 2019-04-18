@@ -1,0 +1,5 @@
+.row { margin: 15px 0px 15px 0px; }
+.readonly { background-image: linear-gradient(225deg, #da6565, #0793b3 10px, #46242463 10px, transparent); }
+.editable {
+  background-image: linear-gradient(225deg, #880c0c, #880c0c 10px, #00bcda00 10px, transparent);
+}
