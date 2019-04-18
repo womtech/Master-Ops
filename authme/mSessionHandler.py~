@@ -1,6 +1,7 @@
 
 # Middleware Class to Handle Session & JWT default operations
 # Usage: Protect Function by mentioning @SessionHandler over the secured functions
+# Written By: Thrinadh <thrinadh@wominternal.com>
 # Date Written: Jan 1, 2019
 
 from django.http import HttpResponse, HttpResponseRedirect
